@@ -1,0 +1,41 @@
+<view class="container">
+  <!-- 用户信息区域 -->
+  <view class="user-info" wx:if="{{!userInfo}}">
+    <image class="avatar" src="https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132" mode="aspectFill"></image>
+    <view class="nickname" bindtap="getUserProfile">点击登录</view>
+  </view>
+  <view class="user-info" wx:else>
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <button class="login-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">点击获取头像</button>
+    <text class="nickname">{{userInfo.nickName}}</text>
+  </view>
+
+  <view class="food-list">
+    <view class="food-item" wx:for="{{foodList}}" wx:key="name">
+      <image class="food-image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="food-info">
+        <text class="food-name">{{item.name}}</text>
+        <view class="food-category">{{item.category}}</view>
+      </view>
+      <view class="food-actions">
+        <button size="mini" bindtap="editFood" data-index="{{index}}">编辑</button>
+        <button size="mini" type="warn" bindtap="deleteFood" data-index="{{index}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <button type="primary" class="add-btn" bindtap="showAddModal">添加菜品</button>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal" hidden="{{!showModal}}">
+    <view class="modal-content">
+      <input placeholder="菜品名称" value="{{editData.name}}" bindinput="onNameInput" />
+      <input placeholder="菜品分类" value="{{editData.category}}" bindinput="onCategoryInput" />
+      <input placeholder="图片链接" value="{{editData.image}}" bindinput="onImageInput" />
+      <view class="modal-btns">
+        <button size="mini" bindtap="hideModal">取消</button>
+        <button size="mini" type="primary" bindtap="saveFood">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

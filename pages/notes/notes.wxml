@@ -1,0 +1,66 @@
+<view class="container">
+  <view class="calendar">
+    <view class="calendar-header">
+      <view class="prev-month" bindtap="prevMonth">〈</view>
+      <view class="current-month">{{year}}年{{month}}月</view>
+      <view class="next-month" bindtap="nextMonth">〉</view>
+    </view>
+    <view class="weekdays">
+      <view wx:for="{{weekdays}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="days">
+      <view 
+        class="day {{item.current ? '' : 'other-month'}} {{selectedDate === item.date ? 'selected' : ''}} {{item.events && item.events.length ? 'has-events' : ''}}"
+        wx:for="{{days}}" 
+        wx:key="date"
+        data-date="{{item.date}}"
+        bindtap="selectDate"
+      >
+        {{item.day}}
+        <view class="event-dots" wx:if="{{item.events && item.events.length}}">
+          <view class="dot {{event.type}}" wx:for="{{item.events}}" wx:for-item="event" wx:key="type"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 当天事件列表 -->
+  <view class="events-list" wx:if="{{selectedDate}}">
+    <view class="events-header">
+      <text>{{selectedDate}} 的事件</text>
+    </view>
+    <view class="event-item {{item.type}}" wx:for="{{events}}" wx:key="_id">
+      <view class="event-time">{{item.time}}</view>
+      <view class="event-content">
+        <text class="event-title">{{item.title}}</text>
+        <text class="event-desc">{{item.description}}</text>
+      </view>
+      <view class="more-btn">⋮</view>
+    </view>
+  </view>
+
+  <!-- 添加事件按钮 -->
+  <view class="add-btn" bindtap="showAddEvent">事</view>
+
+  <!-- 添加事件抽屉 -->
+  <view class="drawer {{showDrawer ? 'show' : ''}}">
+    <view class="drawer-mask" bindtap="hideDrawer"></view>
+    <view class="drawer-content">
+      <view class="drawer-header">
+        <text>添加新事件</text>
+        <view class="close-btn" bindtap="hideDrawer">×</view>
+      </view>
+      <view class="form">
+        <input placeholder="事件标题" value="{{newEvent.title}}" bindinput="onTitleInput" />
+        <textarea placeholder="事件描述" value="{{newEvent.description}}" bindinput="onDescriptionInput" />
+        <picker mode="selector" range="{{eventTypes}}" value="{{eventTypeIndex}}" bindchange="onTypeChange">
+          <view class="picker">类型：{{eventTypes[eventTypeIndex]}}</view>
+        </picker>
+        <picker mode="multiSelector" range="{{dateTimeArray}}" value="{{dateTimeIndex}}" bindchange="onDateTimeChange" bindcolumnchange="onColumnChange">
+          <view class="picker">日期时间：{{newEvent.date || '请选择'}}</view>
+        </picker>
+        <button type="primary" bindtap="saveEvent">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

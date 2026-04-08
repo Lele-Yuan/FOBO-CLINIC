@@ -1,0 +1,22 @@
+<view class="container">
+  <view class="title">今天吃什么？</view>
+  
+  <view class="cards-container">
+    <view class="food-card {{isChanging ? 'changing' : ''}}">
+      <image class="food-image" src="{{currentFood.image}}" mode="aspectFill"></image>
+      <text class="food-name">{{currentFood.name}}</text>
+    </view>
+    <view class="food-card next {{isChanging ? 'changing' : ''}}">
+      <image class="food-image" src="{{nextFood.image}}" mode="aspectFill"></image>
+      <text class="food-name">{{nextFood.name}}</text>
+    </view>
+  </view>
+  
+  <button class="change-btn" type="primary" bindtap="randomFood">换一个</button>
+  
+  <view class="manage-btn" bindtap="goToManage">管理菜品</view>
+  
+  <!-- <view class="ad-container">
+    <ad unit-id="你的广告位ID" ad-type="banner"></ad>
+  </view> -->
+</view>

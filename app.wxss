@@ -1,0 +1,31 @@
+/* 默认按钮样式 */
+button {
+  font-size: 13px !important;
+  background: #ffffff;
+  color: #3F414E;
+  border: 1px solid #e5e5e5;
+}
+
+/* primary类型按钮 */
+button[type="primary"] {
+  background: #3F414E;
+  color: #ffffff;
+  border: none;
+}
+
+/* warn类型按钮 */
+button[type="warn"] {
+  background: #ff7b3a;
+  color: #ffffff;
+  border: none;
+}
+
+/* 按下状态 */
+button:active {
+  opacity: 0.8;
+}
+
+/* 去除按钮边框 */
+button::after {
+  border: none;
+}

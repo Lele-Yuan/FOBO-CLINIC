@@ -1,0 +1,162 @@
+.container {
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.food-list {
+  width: 100%;
+  padding-bottom: 70px;
+}
+
+.food-item {
+  display: flex;
+  align-items: center;
+  padding-right: 16px;
+  margin-bottom: 15px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.food-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px 0 0 8px;
+  object-fit: cover;
+}
+
+.food-info {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.food-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.food-category {
+  font-size: 14px;
+  color: #999;
+}
+
+.food-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.food-actions button {
+  min-width: 60px;
+  margin: 0;
+  border-radius: 6px;
+}
+
+.add-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #191919 !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  padding: 8px 24px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  width: 85%;
+}
+
+.modal-content input {
+  border: 1px solid #eee;
+  padding: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.modal-btns button {
+  min-width: 80px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* 用户信息区域样式保持不变 */
+.user-info {
+  margin-bottom: 30px;
+  background: transparent;
+  border: none;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  border-bottom: .5rpx solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.nickname {
+  font-size: 28rpx;
+  color: #333;
+}
+
+button.login-btn:not([size=mini]) {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 0;
+  display: inline-flex;
+  font-weight: normal;
+  position: absolute;
+  left: 20rpx;
+  top: 20rpx;
+  width: 80rpx;
+  height: 80rpx;
+  opacity: 0;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.nickname-input {
+  border: 1px solid #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+}

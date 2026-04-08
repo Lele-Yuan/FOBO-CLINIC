@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="header">
+    <text class="title">選擇困難症診療室</text>
+    <text class="subtitle">轻松决策，告别纠结?</text>
+    <view class="topic-text">还在为“今天吃什么”“选哪个颜色好”“值班怎么排”而烦恼吗？快来“选择困难症诊疗室”！“决决医生”帮你开处方，轻松搞定选择困难症！</view>
+  </view>
+  
+  <view class="grid">
+    <view class="card {{item.isLarge ? 'large' : ''}}" wx:for="{{cardList}}" wx:key="title" style="background: {{item.bgColor}}" bindtap="navigateTo" data-page="{{item.pagePath}}">
+      <image wx:if="{{item.iconPath}}" src="{{item.iconPath}}" mode="aspectFill"></image>
+      <text class="card-title">{{item.title}}</text>
+    </view>
+  </view>
+</view>
