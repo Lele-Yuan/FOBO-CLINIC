@@ -1,0 +1,6 @@
+<view class="upper-wave-section"></view>
+<view class="header">
+  <text class="title">{{title}}</text>
+  <text class="subtitle" wx:if="{{subtitle}}">{{subtitle}}</text>
+  <view class="topic-text" wx:if="{{desc}}">{{desc}}</view>
+</view>

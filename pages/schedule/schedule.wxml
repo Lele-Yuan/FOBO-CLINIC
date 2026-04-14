@@ -1,0 +1,135 @@
+<view class="container">
+
+  <page-header
+    title="值班排班表"
+    subtitle="科学排班，轻松管理"
+    desc="支持自定义轮休日，生成最优排班表，仅作为参考"
+  ></page-header>
+
+  <view class="nav-actions">
+    <view class="nav-icon-btn" bindtap="goStaff">
+      <text class="nav-icon-text">人员管理</text>
+    </view>
+    <view class="nav-icon-btn" bindtap="goConfig">
+      <text class="nav-icon-text">规则配置</text>
+    </view>
+  </view>
+
+  <!-- 周导航 -->
+  <view class="week-nav">
+    <view class="nav-btn" bindtap="prevWeek">
+      <text class="nav-arrow">‹</text>
+    </view>
+    <text class="week-label">{{weekLabel}}</text>
+    <view class="nav-btn" bindtap="nextWeek">
+      <text class="nav-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 排班表 -->
+  <view class="schedule-card">
+    <view class="schedule-grid">
+
+      <!-- 表头：日期行 -->
+      <view class="grid-header-row">
+        <view class="name-cell header-cell"></view>
+        <view
+          class="day-cell header-cell {{item.isToday ? 'today' : ''}} {{item.isWeekend ? 'weekend' : ''}} {{item.isPast ? 'past' : ''}}"
+          wx:for="{{currentWeekDays}}"
+          wx:key="date"
+        >
+          <text class="day-week">{{item.weekLabel}}</text>
+          <text class="day-date">{{item.dayNum}}</text>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+
+      <!-- 各人员排班行 -->
+      <view class="staff-row" wx:for="{{staffList}}" wx:key="id" wx:for-item="person">
+        <view class="name-cell">
+          <view class="name-dot" style="background: {{person.color}}"></view>
+          <text class="name-text">{{person.name}}</text>
+        </view>
+        <view
+          class="day-cell shift-cell {{day.isPast ? 'past' : ''}}"
+          wx:for="{{currentWeekDays}}"
+          wx:key="date"
+          wx:for-item="day"
+          bindtap="onShiftTap"
+          data-staff-id="{{person.id}}"
+          data-date="{{day.date}}"
+        >
+          <view
+            class="shift-badge {{schedule[day.date][person.id].manual ? 'manual' : ''}}"
+            style="background: {{schedule[day.date][person.id].displayBg}}; color: {{schedule[day.date][person.id].displayText}}"
+          >
+            {{schedule[day.date][person.id].type}}
+            <view wx:if="{{schedule[day.date][person.id].standby}}" class="standby-dot">备</view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
+  <!-- 图例 -->
+  <view class="legend-card">
+    <view class="legend-item" wx:for="{{legendList}}" wx:key="{{index}}">
+      <view class="legend-badge" style="background: {{item.bg}}; color: {{item.text}}">{{item.label}}</view>
+      <text class="legend-desc">{{item.desc}}</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-badge manual-badge">改</view>
+      <text class="legend-desc">手动修改（右上角红点）</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-badge standby-legend-badge">白<view class="standby-dot">备</view></view>
+      <text class="legend-desc">备班（角标叠加，班次不变）</text>
+    </view>
+  </view>
+
+  <!-- 规则说明 -->
+  <view class="rules-card" bindtap="toggleRules">
+    <view class="rules-header">
+      <text class="rules-title">排班规则说明</text>
+      <text class="rules-toggle">{{showRules ? '收起 ∧' : '展开 ∨'}}</text>
+    </view>
+    <view class="rules-body" hidden="{{!showRules}}">
+      <view class="rule-item" wx:for="{{ruleTexts}}" wx:key="{{index}}">
+        <text class="rule-dot">•</text>
+        <text class="rule-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+
+  <!-- 班次选择弹窗 -->
+  <view class="modal-mask" hidden="{{!showShiftPicker}}" bindtap="closeShiftPicker">
+    <view class="shift-picker" catchtap="">
+      <view class="picker-title">选择班次</view>
+      <view class="picker-subtitle">{{pickerContext}}</view>
+      <view class="picker-options">
+        <view
+          class="picker-option"
+          wx:for="{{shiftOptions}}"
+          wx:key="type"
+          bindtap="selectShift"
+          data-type="{{item.type}}"
+          style="background: {{item.bg}}; color: {{item.text}}"
+        >{{item.label}}</view>
+      </view>
+      <!-- 备班标识切换 -->
+      <view class="picker-standby-row" bindtap="toggleStandby">
+        <view class="standby-preview">
+          <view class="standby-preview-badge">白<view class="standby-dot">备</view></view>
+        </view>
+        <text class="picker-standby-label">备班角标标识</text>
+        <view class="picker-standby-toggle {{pickerStandby ? 'on' : ''}}">{{pickerStandby ? '已开启' : '未开启'}}</view>
+      </view>
+      <view class="picker-cancel" bindtap="closeShiftPicker">取消</view>
+    </view>
+  </view>
+
+</view>

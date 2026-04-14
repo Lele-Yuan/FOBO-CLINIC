@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "值班排班",
+  "navigationBarBackgroundColor": "#FAF8F5",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#FAF8F5",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "排班配置",
+  "navigationBarBackgroundColor": "#FAF8F5",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#FAF8F5",
+  "usingComponents": {
+    "page-header": "/components/page-header/page-header"
+  }
+}

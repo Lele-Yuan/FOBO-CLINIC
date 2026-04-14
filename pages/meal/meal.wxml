@@ -1,22 +1,86 @@
 <view class="container">
-  <view class="title">今天吃什么？</view>
-  
-  <view class="cards-container">
-    <view class="food-card {{isChanging ? 'changing' : ''}}">
-      <image class="food-image" src="{{currentFood.image}}" mode="aspectFill"></image>
-      <text class="food-name">{{currentFood.name}}</text>
+  <page-header
+    title="今天吃什么？"
+    subtitle="决决医生来开处方"
+    desc="只有你自己的身体最了解自己，但有时自己又太懒，不知道今天吃啥好。"
+  ></page-header>
+
+  <!-- 配置行 -->
+  <view class="config-row">
+    <view class="config-left">
+      <text class="config-label">选</text>
+      <view class="stepper">
+        <view class="step-btn {{mealCount <= 1 ? 'disabled' : ''}}" bindtap="decrCount">−</view>
+        <text class="step-value">{{mealCount}}</text>
+        <view class="step-btn {{mealCount >= maxCount ? 'disabled' : ''}}" bindtap="incrCount">+</view>
+      </view>
+      <text class="config-label">个菜</text>
     </view>
-    <view class="food-card next {{isChanging ? 'changing' : ''}}">
-      <image class="food-image" src="{{nextFood.image}}" mode="aspectFill"></image>
-      <text class="food-name">{{nextFood.name}}</text>
+    <view class="my-menu-btn" bindtap="goToManage">用我的菜单 →</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="center-area">
+    <text class="hint-text">加载菜单中...</text>
+  </view>
+
+  <!-- 菜单为空 -->
+  <view wx:elif="{{menuList.length === 0}}" class="center-area">
+    <text class="empty-icon">🍽️</text>
+    <text class="hint-text">菜单是空的，先去添加几道菜吧</text>
+    <button size="mini" type="primary" bindtap="goToManage">去添加菜品</button>
+  </view>
+
+  <!-- 初始态：开处方按钮 -->
+  <view wx:elif="{{status === 'idle'}}" class="idle-area">
+    <view class="prescribe-btn" bindtap="onPrescribe">
+      <text class="prescribe-rx">Rx</text>
+      <text class="prescribe-main">请决决老师</text>
+      <text class="prescribe-main">开处方</text>
+    </view>
+    <text class="idle-hint">轻触按钮，让决决老师为你决定</text>
+  </view>
+
+  <!-- 动画态 / 结果态：处方卡片 -->
+  <view wx:elif="{{status === 'spinning' || status === 'result'}}" class="card-area">
+    <view class="prescription-card">
+      <!-- 处方头部 -->
+      <view class="rx-header">
+        <text class="rx-symbol">Rx</text>
+        <text class="rx-title">处  方  签</text>
+      </view>
+      <view class="rx-divider"></view>
+
+      <!-- 菜名区域 -->
+      <view class="food-names-area">
+        <!-- 动画中：快速滚动的菜名 -->
+        <view wx:if="{{status === 'spinning'}}" class="spin-food-name">
+          {{spinDisplayName || '···'}}
+        </view>
+        <!-- 结果：弹入显示选中菜名 -->
+        <block wx:else>
+          <view
+            class="result-food-name {{mealCount > 1 ? 'multi' : 'single'}}"
+            wx:for="{{currentFoods}}"
+            wx:key="name"
+            style="animation-delay: {{index * 120}}ms"
+          >{{item.name}}</view>
+        </block>
+      </view>
+
+      <!-- 处方底部 -->
+      <view class="rx-divider rx-divider-bottom"></view>
+      <view class="rx-footer">
+        <text class="rx-doctor-name">决决医生</text>
+        <text class="rx-stamp" wx:if="{{status === 'result'}}">✓ 已开方</text>
+        <text class="rx-stamp rx-stamp-pending" wx:else>开方中...</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮（仅结果态显示） -->
+    <view class="action-btns" wx:if="{{status === 'result'}}">
+      <button type="warn" class="action-btn" bindtap="onReroll">不想吃，再换一个</button>
+      <button class="action-btn" bindtap="onReset">重新来一次</button>
     </view>
   </view>
-  
-  <button class="change-btn" type="primary" bindtap="randomFood">换一个</button>
-  
-  <view class="manage-btn" bindtap="goToManage">管理菜品</view>
-  
-  <!-- <view class="ad-container">
-    <ad unit-id="你的广告位ID" ad-type="banner"></ad>
-  </view> -->
 </view>

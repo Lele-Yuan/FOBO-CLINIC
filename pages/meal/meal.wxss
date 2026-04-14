@@ -1,98 +1,303 @@
+/* 页面容器 */
 .container {
-  padding: 20px;
-  text-align: center;
   min-height: 100vh;
+  padding: 30rpx;
   box-sizing: border-box;
-  background: #FFCF86;
+  display: flex;
+  flex-direction: column;
 }
 
-.title {
-  font-size: 24px;
-  margin-bottom: 40px;
+/* 配置行 */
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 50rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
 }
 
-.cards-container {
-  position: relative;
-  width: 280px;
-  height: 360px;
-  margin: 30px auto;
+.config-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
 }
 
-.food-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #F1B869;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.config-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background: #F5F5F5;
+  border-radius: 12rpx;
   overflow: hidden;
-  transition: none;
-  transform-style: preserve-3d;
-  transform-origin: left bottom;
-  perspective: 1000px;
+}
+
+.step-btn {
+  width: 60rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  color: #3F414E;
+  font-weight: 400;
+}
+
+.step-btn:active {
+  background: #E0E0E0;
+}
+
+.step-btn.disabled {
+  color: #D0D0D0;
+}
+
+.step-value {
+  width: 56rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: bold;
   color: #3F414E;
 }
 
-.food-card.next {
-  opacity: 0;
-  transform: rotate(180deg) scale(0.8);
-  transform-origin: right bottom;
-  transition: none;
+.my-menu-btn {
+  font-size: 26rpx;
+  color: #FEB18F;
+  font-weight: 500;
 }
 
-.food-card:not(.next).changing {
-  transform: rotate(-180deg) scale(0.8);
-  opacity: 0;
-  transition: all 0.6s ease-in-out;
+/* 通用中央区域 */
+.center-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28rpx;
+  padding: 80rpx 0;
 }
 
-.food-card.next.changing {
-  transform: rotate(0) scale(1);
-  opacity: 1;
-  transition: all 0.6s ease-in-out;
+.empty-icon {
+  font-size: 100rpx;
 }
 
-.food-image {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-  display: block;
+.hint-text {
+  font-size: 28rpx;
+  color: #999;
+  text-align: center;
 }
 
-.food-name {
-  display: block;
-  font-size: 24px;
+/* ============ 初始态 ============ */
+.idle-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 50rpx;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.prescribe-btn {
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FFBE9B, #FF8A65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16rpx 50rpx rgba(254,177,143,0.55), 0 4rpx 16rpx rgba(254,177,143,0.35);
+  gap: 6rpx;
+  transition: all 0.15s ease;
+}
+
+.prescribe-btn:active {
+  transform: scale(0.92);
+  box-shadow: 0 6rpx 20rpx rgba(254,177,143,0.4);
+}
+
+.prescribe-rx {
+  font-size: 30rpx;
+  color: rgba(255,255,255,0.75);
+  font-style: italic;
   font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  height: 80px;
-  line-height: 80px;
+  letter-spacing: 2rpx;
+  margin-bottom: 4rpx;
 }
 
-.change-btn {
-  margin-top: 40px;
-  border-radius: 8px;
-  padding: 12px 24px;
+.prescribe-main {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 3rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0,0,0,0.15);
 }
 
-.manage-btn {
-  margin-top: 20px;
-  border-radius: 8px;
-  padding: 12px 24px;
-  color: #8E97FD;
-  font-size: 14px;
+.idle-hint {
+  font-size: 24rpx;
+  color: #C0C0C0;
+  letter-spacing: 1rpx;
+}
+
+/* ============ 卡片区域 ============ */
+.card-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 40rpx;
+  animation: card-slide-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes card-slide-in {
+  from { opacity: 0; transform: translateY(60rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 处方卡片 */
+.prescription-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 44rpx 44rpx 36rpx;
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 40rpx rgba(254,177,143,0.22), 0 2rpx 8rpx rgba(0,0,0,0.04);
+  border: 2rpx dashed #FED7C0;
+}
+
+.rx-header {
+  display: flex;
+  align-items: baseline;
+  gap: 18rpx;
+  margin-bottom: 22rpx;
+}
+
+.rx-symbol {
+  font-size: 40rpx;
   font-weight: bold;
+  color: #FEB18F;
+  font-style: italic;
 }
 
-.change-btn:active {
-  opacity: 0.8;
+.rx-title {
+  font-size: 24rpx;
+  color: #FEB18F;
+  letter-spacing: 5rpx;
+  font-weight: 500;
 }
 
-.ad-container {
-  width: 100%;
-  margin-top: 30px;
-  padding: 10px 0;
+.rx-divider {
+  height: 1rpx;
+  background: linear-gradient(to right, #FED7C0 60%, transparent);
+  margin-bottom: 44rpx;
+}
+
+.rx-divider-bottom {
+  margin-top: 44rpx;
+  margin-bottom: 24rpx;
+}
+
+/* 菜名展示区 */
+.food-names-area {
+  min-height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 滚动动画中的菜名 */
+@keyframes spin-flash {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.spin-food-name {
+  font-size: 76rpx;
+  font-weight: bold;
+  color: #3F414E;
+  letter-spacing: 6rpx;
+  text-align: center;
+  animation: spin-flash 0.16s infinite;
+}
+
+/* 结果菜名 */
+@keyframes bounce-in {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.result-food-name {
+  text-align: center;
+  color: #3F414E;
+  animation: bounce-in 0.5s ease-out both;
+}
+
+.result-food-name.single {
+  font-size: 76rpx;
+  font-weight: bold;
+  letter-spacing: 8rpx;
+}
+
+.result-food-name.multi {
+  font-size: 56rpx;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+  margin-bottom: 16rpx;
+}
+
+/* 处方底部 */
+.rx-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rx-doctor-name {
+  font-size: 24rpx;
+  color: #C8C8C8;
+  letter-spacing: 2rpx;
+}
+
+.rx-stamp {
+  font-size: 24rpx;
+  color: #FEB18F;
+  font-weight: 500;
+}
+
+.rx-stamp-pending {
+  color: #D0D0D0;
+}
+
+/* 操作按钮 */
+.action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  animation: fade-in 0.3s ease 0.2s both;
+}
+
+.action-btn {
+  width: 100% !important;
+  height: 92rpx !important;
+  line-height: 92rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 30rpx !important;
+  margin: 0 !important;
+  letter-spacing: 1rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

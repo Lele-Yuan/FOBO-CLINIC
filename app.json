@@ -3,7 +3,10 @@
     "pages/home/home",
     "pages/meal/meal",
     "pages/manage/manage",
-    "pages/notes/notes"
+    "pages/notes/notes",
+    "pages/schedule/schedule",
+    "pages/staff/staff",
+    "pages/schedule-config/schedule-config"
   ],
   "window": {
     "navigationBarBackgroundColor": "#fff",

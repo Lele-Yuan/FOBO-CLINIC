@@ -1,0 +1,470 @@
+.container {
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* ─── 周导航 ─── */
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 12px 10px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* 管理入口按钮组 */
+.nav-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+}
+
+.nav-icon-btn {
+  height: 30px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #F0F1FF;
+}
+
+.nav-icon-text {
+  font-size: 12px;
+  color: #8E97FD;
+  font-weight: 500;
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #F5F5F7;
+}
+
+.nav-arrow {
+  font-size: 22px;
+  color: #555;
+  line-height: 1;
+}
+
+.week-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+/* ─── 排班卡片 ─── */
+.schedule-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.schedule-grid {
+  width: 100%;
+}
+
+/* 表头行 & 人员行 */
+.grid-header-row,
+.staff-row {
+  display: flex;
+  align-items: stretch;
+}
+
+.staff-row {
+  border-top: 1px solid #F5F5F7;
+}
+
+.divider {
+  height: 1px;
+  background: #EDEEF2;
+  margin: 0;
+}
+
+/* 姓名列 */
+.name-cell {
+  width: 52px;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  background: #FAFAFA;
+  border-right: 1px solid #F0F0F2;
+}
+
+.name-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+
+.name-text {
+  font-size: 11px;
+  color: #555;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.name-badge {
+  font-size: 9px;
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-top: 3px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+/* 表头空格 */
+.name-cell.header-cell {
+  background: #F7F7F9;
+}
+
+/* 日期列 */
+.day-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2px;
+  min-width: 0;
+}
+
+.day-cell.header-cell {
+  background: #F7F7F9;
+  padding: 10px 2px;
+}
+
+.day-cell.weekend .day-week,
+.day-cell.weekend .day-date {
+  color: #F16B59;
+}
+
+.day-cell.today .day-week,
+.day-cell.today .day-date {
+  color: #8E97FD;
+  font-weight: bold;
+}
+
+/* 过去日期：灰化 */
+.day-cell.header-cell.past .day-week,
+.day-cell.header-cell.past .day-date {
+  opacity: 0.35;
+}
+
+.day-week {
+  font-size: 10px;
+  color: #aaa;
+  margin-bottom: 3px;
+}
+
+.day-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* 班次单元格 */
+.shift-cell {
+  padding: 8px 2px;
+}
+
+/* 过去日期班次：灰化 + 禁用点击反馈 */
+.shift-cell.past .shift-badge {
+  opacity: 0.38;
+}
+
+.shift-cell.past {
+  pointer-events: none;
+}
+
+/* 班次徽章 */
+.shift-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  position: relative;
+}
+
+/* 手动修改：右上角红点 */
+.shift-badge.manual::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: #F16B59;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+
+/* ─── 图例 ─── */
+.legend-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.manual-badge {
+  background: #FEB18F;
+  color: #fff;
+  position: relative;
+}
+
+.manual-badge::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: #F16B59;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+
+.legend-desc {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ─── 规则卡片 ─── */
+.rules-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.rules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rules-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rules-toggle {
+  font-size: 13px;
+  color: #8E97FD;
+}
+
+.rules-body {
+  margin-top: 12px;
+}
+
+.rule-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rule-dot {
+  color: #8E97FD;
+  font-size: 14px;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ─── 弹窗 ─── */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.shift-picker {
+  width: 100%;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px 40px;
+  box-sizing: border-box;
+}
+
+.picker-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.picker-subtitle {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.picker-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.picker-option {
+  height: 54px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.picker-cancel {
+  text-align: center;
+  font-size: 15px;
+  color: #999;
+  padding: 12px 0;
+  border-top: 1px solid #F5F5F7;
+}
+
+.bottom-spacer {
+  height: 30px;
+}
+
+/* 备班叠加角标 */
+.standby-dot {
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  background: #FEB18F;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px;
+  border-radius: 4px;
+  border: 1px solid #fff;
+  pointer-events: none;
+}
+
+/* 图例中备班示例 */
+.standby-legend-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  background: #CEF3D1;
+  color: #50A05E;
+  position: relative;
+  overflow: visible;
+}
+
+/* picker 备班切换行 */
+.picker-standby-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 4px;
+  border-top: 1px solid #F5F5F7;
+  margin-bottom: 4px;
+  gap: 10px;
+}
+
+.standby-preview {
+  flex-shrink: 0;
+}
+
+.standby-preview-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #CEF3D1;
+  color: #50A05E;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+}
+
+.picker-standby-label {
+  flex: 1;
+  font-size: 15px;
+  color: #333;
+}
+
+.picker-standby-toggle {
+  font-size: 13px;
+  color: #bbb;
+  background: #F5F5F7;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.picker-standby-toggle.on {
+  color: #fff;
+  background: #FEB18F;
+}
+

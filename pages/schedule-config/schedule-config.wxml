@@ -1,0 +1,180 @@
+<view class="container">
+
+  <page-header title="排班配置" subtitle="自定义排班规则与人数需求"></page-header>
+
+  <!-- 卡片1：每日班次需求 -->
+  <view class="config-card">
+    <view class="card-title">每日班次需求</view>
+
+    <view class="config-row">
+      <view class="row-info">
+        <text class="row-label">白班人数</text>
+        <text class="row-hint">每天需要上白班的最少人数</text>
+      </view>
+      <text class="stat-val">{{staffCount.dayCount}} 人</text>
+    </view>
+
+    <view class="config-row">
+      <view class="row-info">
+        <text class="row-label">倒班人数</text>
+        <text class="row-hint">自动统计人员管理中的倒班人数，不可编辑</text>
+      </view>
+      <text class="stat-val">{{staffCount.rotateCount}} 人</text>
+      <view class="rotate-hint-row">
+        <text class="rotate-hint">· 3 人倒班：主班 → 夜班 → 下班，3 天一轮</text>
+        <text class="rotate-hint">· 4 人倒班：主班 → 夜班 → 下班 → 休班，4 天一轮</text>
+      </view>
+    </view>
+
+    <view class="config-row no-border">
+      <view class="row-info">
+        <text class="row-label">备班人数</text>
+        <text class="row-hint">每天备班岗位人数</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="R_standby">−</view>
+        <text class="step-val">{{cfg.R_standby}}</text>
+        <view class="step-btn" bindtap="stepUp" data-field="R_standby">＋</view>
+      </view>
+    </view>
+
+    <view class="config-row no-border">
+      <view class="row-info">
+        <text class="row-label">备班连续天数</text>
+        <text class="row-hint">同一人最多连续担任备班的天数，默认 1</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="maxConsecutiveStandby">−</view>
+        <text class="step-val">{{cfg.maxConsecutiveStandby}}</text>
+        <view class="step-btn" bindtap="stepUp" data-field="maxConsecutiveStandby">＋</view>
+      </view>
+    </view>
+
+    <view class="config-row no-border">
+      <view class="row-info">
+        <text class="row-label">倒班主班备班</text>
+        <text class="row-hint">允许倒班人员在上主班时参与备班</text>
+      </view>
+      <switch checked="{{cfg.allowMainStandby}}" bindchange="toggleAllowMainStandby" color="#8E97FD"/>
+    </view>
+  </view>
+
+  <!-- 卡片2：休息配额 -->
+  <view class="config-card">
+    <view class="card-title">休息配额</view>
+
+    <view class="config-row">
+      <view class="row-info">
+        <text class="row-label">每周总休息</text>
+        <text class="row-hint">每人每周常规休息天数（不含备班后补偿）</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="T_week">−</view>
+        <text class="step-val">{{cfg.T_week}}天</text>
+        <view class="step-btn" bindtap="stepUp" data-field="T_week">＋</view>
+      </view>
+    </view>
+
+    <view class="config-row">
+      <view class="row-info">
+        <text class="row-label">下夜后休息</text>
+        <text class="row-hint">下夜班次日强制全天休息天数</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="T_after_night">−</view>
+        <text class="step-val">{{cfg.T_after_night}}天</text>
+        <view class="step-btn" bindtap="stepUp" data-field="T_after_night">＋</view>
+      </view>
+    </view>
+
+    <view class="config-row no-border">
+      <view class="row-info">
+        <text class="row-label">备班后休息</text>
+        <text class="row-hint">备班次日上午休息（不计入每周配额）</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="T_after_standby">−</view>
+        <text class="step-val">{{cfg.T_after_standby}}天</text>
+        <view class="step-btn" bindtap="stepUp" data-field="T_after_standby">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 卡片3：工作日约束 -->
+  <view class="config-card">
+    <view class="card-title">工作日约束</view>
+
+    <view class="constraint-group">
+      <text class="group-label">强制全员日（不允许常规轮休）</text>
+      <view class="day-chips">
+        <view
+          class="day-chip {{forcedDayMap[item.value] ? 'forced' : ''}}"
+          wx:for="{{dayList}}"
+          wx:key="value"
+          bindtap="toggleForcedDay"
+          data-day="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="constraint-group">
+      <text class="group-label">轮休日（允许安排常规休息）</text>
+      <view class="day-chips">
+        <view
+          class="day-chip {{restDayMap[item.value] ? 'rest' : ''}}"
+          wx:for="{{dayList}}"
+          wx:key="value"
+          bindtap="toggleRestDay"
+          data-day="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="constraint-group">
+      <text class="group-label">护士长可休日</text>
+      <view class="day-chips">
+        <view
+          class="day-chip {{headDayMap[item.value] ? 'head' : ''}}"
+          wx:for="{{dayList}}"
+          wx:key="value"
+          bindtap="toggleHeadDay"
+          data-day="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="constraint-group">
+      <text class="group-label">备孕人员可休日</text>
+      <view class="day-chips">
+        <view
+          class="day-chip {{prepDayMap[item.value] ? 'prep' : ''}}"
+          wx:for="{{dayList}}"
+          wx:key="value"
+          bindtap="togglePrepDay"
+          data-day="{{item.value}}"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="config-row no-border">
+      <view class="row-info">
+        <text class="row-label">轮休日最少上班人数</text>
+        <text class="row-hint">轮休日每天至少需要在岗的人数</text>
+      </view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepDown" data-field="minOnDuty">−</view>
+        <text class="step-val">{{cfg.minOnDuty}}</text>
+        <view class="step-btn" bindtap="stepUp" data-field="minOnDuty">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-row">
+    <view class="btn-reset" bindtap="reset">恢复默认</view>
+    <view class="btn-save" bindtap="save">保存配置</view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+
+</view>

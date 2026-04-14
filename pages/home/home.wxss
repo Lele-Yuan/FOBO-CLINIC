@@ -2,41 +2,7 @@
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
-  background: linear-gradient(160deg, #E0F0FF 0%, #EDE6F5 35%, #F9E7F0 65%, #FFF5F0 100%);
-}
-
-.image-bg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-}
-
-.header {
-  margin-bottom: 30px;
   position: relative;
-}
-
-.title {
-  font-size: 32px;
-  font-weight: bold;
-  color: #333;
-  display: block;
-}
-
-.subtitle {
-  font-size: 24px;
-  color: #666;
-  display: block;
-  margin-top: 5px;
-}
-
-.topic-text {
-  font-size: 14px;
-  line-height: 1.5;
-  letter-spacing: 1px;
-  color: #999;
-  margin-top: 20px;
 }
 
 .grid {
