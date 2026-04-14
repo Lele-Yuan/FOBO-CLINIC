@@ -36,7 +36,7 @@ const DEFAULT_CONFIG = {
   forcedWorkDays:    [1, 3, 5],    // 强制全员日（0=日 1=一…6=六），禁止常规轮休
   restRotationDays:  [0, 2, 4, 6], // 轮休日，允许安排常规轮休
   minOnDuty: 1,        // 轮休日每天最少上班人数
-  allowMainStandby: true, // 倒班人员上主班时是否允许备班
+  allowMainStandby: false, // 倒班人员上主班时是否允许备班
   maxConsecutiveStandby: 1, // 同一人最多连续备班天数，默认 1（昨天备班则今天不再备班）
   headRestDays:  [0, 6], // 护士长可休日，默认周六、周日
   prepRestDays:  [2, 4], // 备孕人员可休日，默认周二、周四

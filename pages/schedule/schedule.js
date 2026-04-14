@@ -20,6 +20,7 @@ const SHIFT_COLORS = {
   '补': { bg: AM_REST_GRADIENT, text: '#888' }, // 上午休（备班次日补偿 / 手动排班），rest AM work PM
   '上半': { bg: PM_REST_GRADIENT, text: '#888' }, // 上午班半天（work AM, rest PM）
   '下半': { bg: AM_REST_GRADIENT, text: '#888' }, // 下午班半天（rest AM, work PM，手动）
+  '休(补)': { bg: '#D8E8F0', text: '#6A8FA0' },   // 补休全天（备班次日补偿，2人白班池专用），计0.5天配额
 }
 
 const LEGEND_LIST = [
@@ -28,9 +29,10 @@ const LEGEND_LIST = [
   { label: '下', desc: '倒班全天休息',                      bg: '#E8EAF0',        text: '#aaa' },
   { label: '白', desc: '白班',                              bg: '#F3E6CE',        text: '#A07850' },
   { label: '休', desc: '轮休（全天）',                      bg: '#E8EAF0',        text: '#aaa' },
-  { label: '补',  desc: '上午休（备班补偿/手动），下午上班', bg: AM_REST_GRADIENT, text: '#888' },
-  { label: '上半', desc: '上午班半天，下午休息（手动）',      bg: PM_REST_GRADIENT, text: '#888' },
-  { label: '下半', desc: '下午班半天，上午休息（手动）',      bg: AM_REST_GRADIENT, text: '#888' },
+  { label: '补',    desc: '上午休（备班补偿/手动），下午上班',           bg: AM_REST_GRADIENT, text: '#888' },
+  { label: '上半',  desc: '上午班半天，下午休息（手动）',                 bg: PM_REST_GRADIENT, text: '#888' },
+  { label: '下半',  desc: '下午班半天，上午休息（手动）',                 bg: AM_REST_GRADIENT, text: '#888' },
+  { label: '休(补)', desc: '补休全天（计0.5天，仅2人白班池备班次日）',    bg: '#D8E8F0',        text: '#6A8FA0' },
 ]
 
 const WEEK_LABELS_SHORT = ['日', '一', '二', '三', '四', '五', '六']
@@ -159,6 +161,9 @@ function pass2Standby(schedule, dates, staffList, config) {
 
   if (standbyPool.length === 0) return
 
+  // 白班人员池大小：决定备班次日补偿类型（2人→'休(补)'，>=3人→'补'）
+  const dayPoolSize = staffList.filter(p => p.type === 'day').length
+
   const maxConsecutive = config.maxConsecutiveStandby || 1
 
   let pointer = 0
@@ -190,7 +195,7 @@ function pass2Standby(schedule, dates, staffList, config) {
 
       cell.standby = true
       if (person.type !== 'rotate') {
-        _setAMRest(schedule, date, staffId)
+        _setAMRest(schedule, date, staffId, dayPoolSize, config.T_week)
       }
       pointer = (idx + 1) % standbyPool.length
       assigned = true
@@ -215,14 +220,25 @@ function _consecutiveStandbyBefore(schedule, date, staffId, max) {
   return count
 }
 
-// 备班次日设上午休'补'（不计入每周配额）
-// 注意：若次日已是轮休（'休'/'下'/'上半'），不覆盖，防止撤销 pass4 的安排
-function _setAMRest(schedule, date, staffId) {
-  const nextKey = formatDate(addDays(date, 1))
+// 备班次日设补偿班次：
+//   白班池 >= 3 人 → '补'（上午休/下午上班，不计配额，逻辑不变）
+//   白班池 == 2 人 → 优先'休(补)'（计0.5天），但若本周配额已满则降级为'补'
+//     原因：一周内可能有 3~4 次备班，若全用'休(补)'会超出 T_week
+// 注意：若次日已是轮休（'休'/'下'/'上半'/'休(补)'），不覆盖
+function _setAMRest(schedule, date, staffId, dayPoolSize, T_week) {
+  const nextDate = addDays(date, 1)
+  const nextKey  = formatDate(nextDate)
   if (!schedule[nextKey] || !schedule[nextKey][staffId]) return
   const next = schedule[nextKey][staffId]
-  if (!next.manual && !['休', '下', '上半'].includes(next.type)) {
-    next.type = '补'
+  if (!next.manual && !['休', '下', '上半', '休(补)'].includes(next.type)) {
+    if (dayPoolSize === 2) {
+      // 检查次日所在周的当前休息分，避免多个'休(补)'叠加超出配额
+      const weekDays     = getWeekDays(getWeekStart(nextDate))
+      const currentScore = _calcRestScore(schedule, staffId, weekDays)
+      next.type = (currentScore + 0.5 <= T_week) ? '休(补)' : '补'
+    } else {
+      next.type = '补'
+    }
   }
 }
 
@@ -335,6 +351,7 @@ function _calcRestScore(schedule, staffId, days) {
     const t = schedule[key][staffId].type
     if (t === '休' || t === '下') score += 1
     if (t === '上半' || t === '下半') score += 0.5 // 半天休息计0.5天
+    if (t === '休(补)') score += 0.5               // 补休全天，计0.5天（2人白班池备班次日）
     // '补' 不计入配额（备班补偿休）
   })
   return score
@@ -471,7 +488,7 @@ Page({
       restStr     ? `${restStr}：轮休日，至少 ${config.minOnDuty} 人在岗` : '',
       `每人每周常规休息 ${config.T_week} 天（不含备班后补偿）`,
       `备班为叠加角标标识，不替换班次；白班人员及倒班主班（可配置）可参与备班`,
-      `白班备班次日自动排"补"（上午休下午上班），不计入每周 ${config.T_week} 天配额`,
+      `白班备班次日自动补休：白班池≥3人排"补"（上午休下午上班，不计配额）；白班池=2人排"休(补)"（补休全天，计0.5天）`,
       `下夜班次日全天休息 ${config.T_after_night} 天`,
       `护士长休息固定安排在周六、周日`,
       `过去日期不可手动修改排班`,

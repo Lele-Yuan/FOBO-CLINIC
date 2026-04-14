@@ -47,7 +47,7 @@ Page({
     const cfg       = scheduleData.getScheduleConfig()
     const staffList = scheduleData.getStaffList()
     const rotateCount = staffList.filter(s => s.type === 'rotate').length
-    const dayCount    = staffList.filter(s => s.type !== 'rotate').length
+    const dayCount    = staffList.filter(s => s.type === 'day').length
     const forcedDayMap = {}
     const restDayMap   = {}
     const headDayMap   = {}
